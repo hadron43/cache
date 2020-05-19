@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Associative {
+public class Direct {
 
     static class Block{
         int data[];
@@ -45,7 +45,7 @@ public class Associative {
         static int offsetSize;
         static int powersOfTwo[];
 
-        void powInit(){
+        private void powInit(){
             powersOfTwo = new int[31];
             powersOfTwo[0] = 1;
             for(int i=1; i<31; ++i)
@@ -54,7 +54,6 @@ public class Associative {
 
         int S, CL, B;
         Cache(int S, int CL, int B){
-
             //Checking for consistency in given constraints
             if(S!=(CL*B*8)){
                 System.err.println("Sizes are inconsistent! Aborting!!");
@@ -79,14 +78,14 @@ public class Associative {
         static int cycleNo = 0;
 
         int lookup(int address){
-            int tagValue = address>>offsetSize;
-            int index = -1;
-            for(int i=0; i<tag.length; ++i){
-                if(tag[i]==tagValue){
-                    index = i;
-                    break;
-                }
-            }
+            int tagValue = address>>(offsetSize);
+            int noOfIndexBits = (int)(Math.log(CL)/Math.log(2));
+            int index = tagValue & (powersOfTwo[noOfIndexBits] - 1);
+            tagValue = tagValue >> noOfIndexBits;
+
+            if(tag[index]!=tagValue)
+                index = -1;
+
             ++cycleNo;
             if(cycleNo==tag.length/2){
                 for(int i=0; i<counter.length; ++i)
@@ -113,22 +112,12 @@ public class Associative {
         void write(int address, int value){
             int index = lookup(address);
             if(index==-1){
-                //Find a suitable candidate for replacement
-                for(int i=0; i<valid.length; ++i)
-                    if(valid[i]==false){
-                        index = i;
-                        break;
-                    }
+                int tagValue = address>>(offsetSize);
+                int noOfIndexBits = (int)(Math.log(CL)/Math.log(2));
+                index = tagValue & (powersOfTwo[noOfIndexBits] - 1);
+                tagValue = tagValue >> noOfIndexBits;
 
-                if(index==-1){
-                    index = 0;
-                    for(int i=0; i<counter.length; ++i){
-                        if(counter[index]>counter[i])
-                            index = i;
-                    }
-                }
-
-                tag[index] = address>>offsetSize;
+                tag[index] = tagValue;
                 data[index] = new Block(B);
             }
 
@@ -155,7 +144,7 @@ public class Associative {
         int S = sc.nextInt();
         int CL = sc.nextInt();
         int B = sc.nextInt();
-        
+
         Cache cache = new Cache(S, CL, B);
 
         System.out.print("Enter no of queries: ");
