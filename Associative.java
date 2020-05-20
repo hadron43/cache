@@ -90,7 +90,8 @@ public class Associative {
             ++cycleNo;
             if(cycleNo==tag.length/2){
                 for(int i=0; i<counter.length; ++i)
-                    counter[i]--;
+                    if(counter[i]>0)    
+                        counter[i]--;
                 
                 cycleNo = 0;
             }

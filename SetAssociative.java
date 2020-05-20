@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Direct {
+public class SetAssociative {
 
     static class Block{
         int data[];
@@ -42,25 +42,27 @@ public class Direct {
         Block data[];   //Data
 
         static int tagSize;
-        static int offsetSize;
+        static int offsetSize, setIdSize;
         static int powersOfTwo[];
 
-        private void powInit(){
+        void powInit(){
             powersOfTwo = new int[31];
             powersOfTwo[0] = 1;
             for(int i=1; i<31; ++i)
                 powersOfTwo[i] = powersOfTwo[i-1]*2;
         }
 
-        int S, CL, B;
-        Cache(int S, int CL, int B){
+        int S, CL, B, N;
+        Cache(int S, int CL, int B, int N){
+
             //Checking for consistency in given constraints
             if(S!=(CL*B*8)){
                 System.err.println("Sizes are inconsistent! Aborting!!");
                 System.exit(0);
             }
 
-            offsetSize = (int)(Math.log(B)/Math.log(2));  
+            offsetSize = (int)(Math.log(B)/Math.log(2));
+            setIdSize = (int)(Math.log(CL/N)/Math.log(2));  
             tag = new int[CL];
             data = new Block[CL];
             for(int i=0; i<CL; ++i)
@@ -72,24 +74,28 @@ public class Direct {
             this.B = B;
             this.CL = CL;
             this.S = S;
+            this.N = N;
             powInit();
         }
 
         static int cycleNo = 0;
 
         int lookup(int address){
-            int tagValue = address>>(offsetSize);
-            int noOfIndexBits = (int)(Math.log(CL)/Math.log(2));
-            int index = tagValue & (powersOfTwo[noOfIndexBits] - 1);
-            tagValue = tagValue >> noOfIndexBits;
+            int tagValue = address>>offsetSize;
+            int setId = tagValue & (powersOfTwo[setIdSize] - 1);
+            tagValue = tagValue>>setIdSize;
 
-            if(tag[index]!=tagValue)
-                index = -1;
-
+            int index = -1;
+            for(int i=setId*N; i<(setId+1)*N; ++i){
+                if(tag[i]==tagValue){
+                    index = i;
+                    break;
+                }
+            }
             ++cycleNo;
             if(cycleNo==tag.length/2){
                 for(int i=0; i<counter.length; ++i)
-                    if(counter[i]>0)
+                    if(counter[i]>0)    
                         counter[i]--;
                 
                 cycleNo = 0;
@@ -113,13 +119,25 @@ public class Direct {
         void write(int address, int value){
             int index = lookup(address);
             if(index==-1){
-                int tagValue = address>>(offsetSize);
-                int noOfIndexBits = (int)(Math.log(CL)/Math.log(2));
-                index = tagValue & (powersOfTwo[noOfIndexBits] - 1);
-                tagValue = tagValue >> noOfIndexBits;
+                //Find a suitable candidate for replacement
+                int tagValue = address>>offsetSize;
+                int setId = tagValue & (powersOfTwo[setIdSize] - 1);
+                tagValue = tagValue>>setIdSize;
+
+                index = setId*N;
+                for(int i=setId*N; i<(setId+1)*(N); ++i){
+                    if(counter[i]<counter[index]){
+                        index = i;
+                    }
+                    if(valid[i]==false){
+                        index = i;
+                        break;
+                    }
+                }
 
                 tag[index] = tagValue;
                 data[index] = new Block(B);
+                counter[index] = 15;
             }
 
             valid[index] = true;
@@ -131,7 +149,7 @@ public class Direct {
 
         void print(){
             for(int i=0; i<data.length; ++i){
-                System.out.print(tag[i]+"\t"+valid[i]+"\t");
+                System.out.print(tag[i]+"\t"+valid[i]+"\t"+counter[i]+"\t");
                 data[i].print();
                 System.out.println();
             }
@@ -141,12 +159,13 @@ public class Direct {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enter S, CL, B: ");
+        System.out.print("Enter S, CL, B, N: ");
         int S = sc.nextInt();
         int CL = sc.nextInt();
         int B = sc.nextInt();
-
-        Cache cache = new Cache(S, CL, B);
+        int N = sc.nextInt();
+        
+        Cache cache = new Cache(S, CL, B, N);
 
         System.out.print("Enter no of queries: ");
         int Q = sc.nextInt();
