@@ -36,7 +36,7 @@ The program will ask for the parameters to create cache memory. Below is the def
 2. CL : It is the number of cache lines (or the number of blocks) in the cache.
 3. B  : It is the number of words in a block. Please note, it is not the same as memory occupied by the block.
 4. N  : It is the number of blocks in a set.  
-***Please note that this parameter is only applicable for n-Way set associative cahce memory.***
+***Please note that this parameter is only applicable for n-Way set associative cache memory.***
 
 ## Basic Instructions to be Used during Program execution
 
@@ -48,12 +48,15 @@ Four instructions are supported by these program:
 print
 ```
 
+![Print Format](https://github.com/hadron43/cache/blob/master/samples/Print.png)
+
 2. **Read** : This instruction is used to read something from the cache memory.
 
 ```bash
 read <targetAddress>
 ```
 
+Output Format: *Adresss : Value*
 3. **Write** : This instruction is used to write something to the cache memory.
 
 ```bash
@@ -71,8 +74,8 @@ exit
 1. ***Direct.java*** :  
 ![Sampe Test for Direct.java](https://github.com/hadron43/cache/blob/master/samples/Direct.png)
 
-2. ***Associative.java*** :
+2. ***Associative.java*** :  
 ![Sample Test for Associative.java](https://github.com/hadron43/cache/blob/master/samples/Associative.png)
 
-3. ***SetAssociative.java*** :
+3. ***SetAssociative.java*** :  
 ![Sample Test for SetAssociative.java](https://github.com/hadron43/cache/blob/master/samples/Associative.png)
