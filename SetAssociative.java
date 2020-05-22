@@ -176,6 +176,11 @@ public class SetAssociative {
                 cache.print();
                 continue;
             }
+            else if(command.equals("exit")){
+                cache.print();
+                Q = false;
+                continue;
+            }
 
             int address = sc.nextInt();
             if(command.equals("read")){
@@ -184,10 +189,6 @@ public class SetAssociative {
             else if(command.equals("write")){
                 int data = sc.nextInt();
                 cache.write(address, data);
-            }
-            else if(command.equals("exit")){
-                cache.print();
-                Q = false;
             }
             else
                 System.out.println("Invalid Command!");
