@@ -25,38 +25,54 @@ javac FileName.java
 java FileName
 ```
 
+Alternatively, you can also do:
+```bash
+java FileName.java
+```
+
 The program will ask for the parameters to create cache memory. Below is the definition for each of the parameters used.  
 
-1. S	: It is the size of the cache (in bytes) to be built.
-2. CL	: It is the number of cache lines (or the number of blocks) in the cache.
-3. B	: It is the number of words in a block. Please note, it is not the same as memory occupied by the block.
-4. N	: It is the number of blocks in a set. 
+1. S  : It is the size of the cache (in bytes) to be built.
+2. CL : It is the number of cache lines (or the number of blocks) in the cache.
+3. B  : It is the number of words in a block. Please note, it is not the same as memory occupied by the block.
+4. N  : It is the number of blocks in a set.  
 ***Please note that this parameter is only applicable for n-Way set associative cahce memory.***
 
 ## Basic Instructions to be Used during Program execution
 
 Four instructions are supported by these program:
 
-1. **Print**	: It prints the present status of the cache memory.
+1. **Print** : It prints the present status of the cache memory.
 
-```
+```bash
 print
 ```
 
-2. **Read**	: This instruction is used to read something from the cache memory.
+2. **Read** : This instruction is used to read something from the cache memory.
 
-```
+```bash
 read <targetAddress>
 ```
 
-3. **Write**	: This instruction is used to write something to the cache memory.
+3. **Write** : This instruction is used to write something to the cache memory.
 
-```
+```bash
 write <targetAddress> <value>
 ```
 
-4. **Exit**	: This print the final status of the cache and quits the program.
+4. **Exit** : This print the final status of the cache and quits the program.
 
-```
+```bash
 exit
 ```
+
+## Samples
+
+1. ***Direct.java*** :  
+![Sampe Test for Direct.java](https://github.com/hadron43/cache/blob/master/samples/Direct.png)
+
+2. ***Associative.java*** :
+![Sample Test for Associative.java](https://github.com/hadron43/cache/blob/master/samples/Associative.png)
+
+3. ***SetAssociative.java*** :
+![Sample Test for SetAssociative.java](https://github.com/hadron43/cache/blob/master/samples/Associative.png)
