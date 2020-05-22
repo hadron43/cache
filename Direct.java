@@ -148,10 +148,9 @@ public class Direct {
 
         Cache cache = new Cache(S, CL, B);
 
-        System.out.print("Enter no of queries: ");
-        int Q = sc.nextInt();
+        boolean Q = true;
 
-        for(int q=0; q<Q; ++q){
+        while(Q){
             String command = sc.next();
 
             if(command.equals("print")){
@@ -166,6 +165,10 @@ public class Direct {
             else if(command.equals("write")){
                 int data = sc.nextInt();
                 cache.write(address, data);
+            }
+            else if(command.equals("exit")){
+                cache.print();
+                Q = false;
             }
             else
                 System.out.println("Invalid Command!");
