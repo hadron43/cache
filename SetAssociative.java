@@ -165,7 +165,7 @@ public class SetAssociative {
         int B = sc.nextInt();
         int N = sc.nextInt();
         
-        Cache cache = new Cache(S, CL, B, N);
+        Cache cache = new Cache(S, CL*N, B, N);
 
         boolean Q = true;
 
