@@ -78,4 +78,4 @@ exit
 ![Sample Test for Associative.java](https://github.com/hadron43/cache/blob/master/samples/Associative.png)
 
 3. ***SetAssociative.java*** :  
-![Sample Test for SetAssociative.java](https://github.com/hadron43/cache/blob/master/samples/Associative.png)
+![Sample Test for SetAssociative.java](https://github.com/hadron43/cache/blob/master/samples/SetAssociative.png)
